@@ -1,27 +1,42 @@
-version: '3'
+version: '3.7'
 services:
     app:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: appposition
+        container_name: position_app
         restart: unless-stopped
-        environment:
-            SERVICE_NAME: app
-        working_dir: /var/www/html
+        tty: true
+        command: php artisan serve --host=0.0.0.0
         ports:
             - "8008:8000"
         volumes:
-            - ./:/var/www/html
-    #Nginx Service
-    nginx:
-        container_name: appposition_nginx
-        image: nginx:1.25.1
+            -   .:/var/www
+        working_dir: /var/www
+        networks:
+            - app-network
+    db:
+        image: mysql:5.7.22
+        container_name: position_db
+        restart: unless-stopped
+        tty: true
         ports:
-            - "88:80"
-            - "445:443"
-        volumes:
-            - ./nginx.conf/nginx.conf.conf:/etc/nginx.conf/nginx.conf/default.conf
-        depends_on:
-            - app
-
+            - "3308:3306"
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: dbRoot!23
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - app-network
+    mailhog:
+            container_name: position_mailhog
+            image: mailhog/mailhog
+            ports:
+                - "1026:1025"
+                - "8026:8025"
+            networks:
+                - app-network
+networks:
+    app-network:
+        driver: bridge
