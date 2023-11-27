@@ -24,3 +24,7 @@ docker-compose up -d --build
 docker exec -it position_app php artisan migrate
 docker exec -it position_app php artisan db:seed
 docker exec -it poisition_app php artisan queue:work
+
+#Mailhog
+
+open on your browser http://localhost:8026
