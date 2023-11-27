@@ -18,8 +18,8 @@ https://documenter.getpostman.com/view/14683797/2s9YeEcCiw<br><br><br>
 <h1>Run project</h1>
 
 docker-compose up -d --build
-docker exec -it position_app php artisan migrate
-docker exec -it position_app php artisan db:seed
+docker exec -it position_app php artisan migrate<br>
+docker exec -it position_app php artisan db:seed<br>
 docker exec -it poisition_app php artisan queue:work<br><br><br>
 
 <h1>Mailhog</h1>
